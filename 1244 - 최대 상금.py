@@ -1,21 +1,27 @@
-def dfs(idx, score, kcal):
+def dfs(cnt):
   global answer
 
-  if kcal > L:
+  if not cnt:
+    t = int(''.join(n))
+    if answer < t:
+      answer = t
     return
-  if answer < score:
-    answer = score
-  if idx == N:
-    return
-  
-  dfs(idx+1, score+burger[idx][0], kcal+burger[idx][1])
-  dfs(idx+1, score, kcal)
+
+  for i in range(len(n)):
+    for j in range(i+1, len(n)):
+      n[i], n[j] = n[j], n[i]
+      tempStr = ''.join(n)
+      if visited.get((tempStr, cnt-1), 1):
+        visited[(tempStr, cnt-1)] = 0
+        dfs(cnt-1)
+      n[i], n[j] = n[j], n[i]
+
 
 T = int(input())
-for tc in range(T):
-  N, L = map(int, input().split())
-  burger = [list(map(int, input().split())) for _ in range(N)]
+for tc in range(1, T+1):
+  n, cnt = map(int, input().split())
+  n = list(str(n))
   answer = 0
-  dfs(0,0,0)
-
-  print(f'#{tc+1} {answer}')
+  visited = {}
+  dfs(cnt)
+  print(f'#{tc} {answer}')
